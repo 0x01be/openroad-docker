@@ -31,11 +31,7 @@ RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /open
 RUN mkdir /openroad/build
 WORKDIR /openroad/build
 
-#RUN cmake \
-#    -DSWIG_VERSION=$SWIG_VERSION \
-#    -DSWIG_DIR=$SWIG_DIR \
-#    -DSWIG_EXECUTABLE=$SWIG_EXECUTABLE \
-#    ..
-#RUN make
-#RUN make install
+RUN cmake ..
+RUN make
+RUN make install
 
