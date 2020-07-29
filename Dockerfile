@@ -28,10 +28,11 @@ ENV PATH $PATH:/opt/swig/bin/
 
 RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /openroad
 
-RUN mkdir /openroad/build
-WORKDIR /openroad/build
+# FIXME
+#RUN mkdir /openroad/build
+#WORKDIR /openroad/build
 
-RUN cmake ..
-RUN make
-RUN make install
+#RUN cmake ..
+#RUN make
+#RUN make install
 
