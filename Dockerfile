@@ -13,7 +13,8 @@ RUN apk add --no-cache --virtual build-dependencies \
     zlib-dev \
     autoconf \
     automake \
-    pcre-dev
+    pcre-dev \
+    qt5-qtbase-dev
 
 COPY --from=swig /opt/swig/ /opt/swig/
 
@@ -24,32 +25,33 @@ ENV PATH $PATH:/opt/swig/bin/
 
 RUN git clone --depth 1 https://gitlab.com/libeigen/eigen.git /eigen
 
-WORKDIR /eigen/build/
+WORKDIR /eigen/build
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/eigen \
     ..
 RUN make
 RUN make install
 
-RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /openroad
-
-
-WORKDIR /openroad/build
-
-ADD http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz ./lemon-1.3.1.tar.gz
-
+ADD http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz /lemon-1.3.1.tar.gz
+WORKDIR /
 RUN tar xzf lemon-1.3.1.tar.gz
-WORKDIR /openroad/build/lemon-1.3.1/build
+WORKDIR /lemon-1.3.1/build
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/lemon \
     ..
 RUN make
-RUN make install
+RUN make install 
+
+RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /openroad
 
 WORKDIR /openroad/build
 
-ENV LD_LIBRARY_PATH /lib/:/usr/lib/:/opt/eigen/lib/:/opt/lemon/lib/
-ENV C_INCLUDE_PATH /usr/include/:/opt/eigen/include/:/opt/lemon/include/
+ENV LD_LIBRARY_PATH /opt/eigen/lib/:/opt/lemon/lib/
+ENV C_INCLUDE_PATH /opt/eigen/include/:/opt/lemon/include/
+
+RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp
+RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h
+RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h
 
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
