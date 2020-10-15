@@ -25,7 +25,6 @@ ENV SWIG_VERSION=3.0.12
 ENV SWIG_DIR /opt/swig/share/swig/$SWIG_VERSION/
 ENV SWIG_EXECUTABLE /opt/swig/bin/swig
 ENV PATH $PATH:/opt/swig/bin/
-ENV C_INCLUDE_PATH /usr/include/:/opt/eigen/include/
 
 ENV LEMON_VERSION 1.3.1
 
@@ -39,14 +38,13 @@ RUN cmake \
 RUN make
 RUN make install 
 
-ENV C_INCLUDE_PATH ${C_INCLUDE_PATH}:/opt/lemon/include
-ENV LD_LIBRARY_PATH /lib/:/usr/lib/:/opt/lemon/lib/
-
 RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /openroad
 
 WORKDIR /openroad/build
 
 ENV LD_LIBRARY_PATH /lib/:/usr/lib:/opt/lemon/lib/
+ENV C_INCLUDE_PATH /usr/include/:/opt/lemon/include/:/opt/eigen/include/
+ENV CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:/opt/eigen
 
 RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp
 RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h
@@ -55,6 +53,7 @@ RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
+    -DEigen3_DIR=/opt/eigen/ \
     ..
 RUN make
 RUN make install
