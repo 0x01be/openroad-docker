@@ -4,7 +4,6 @@ FROM 0x01be/xpra
 
 COPY --from=build /opt/openroad/ /opt/openroad/
 
-USER root
 RUN chmod +x /opt/openroad/bin/*
 RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
@@ -12,12 +11,13 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     libstdc++ \
     tcl \
     zlib \
-    pcre \
-    qt5-qtbase-x11
-
-USER xpra
+    pcre
 
 ENV PATH ${PATH}:/opt/openroad/bin/
 
-ENV COMMAND "openroad -gui"
+RUN adduser -D -u 1000 openroad
+WORKDIR /workspace
+RUN chown openroad:openroad /workspace
+
+USER openroad
 
