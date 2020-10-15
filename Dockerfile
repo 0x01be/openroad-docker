@@ -64,4 +64,5 @@ RUN cmake \
     ..
 RUN make
 RUN make install
+RUN chmod +x /opt/openroad/bin/*
 
