@@ -1,6 +1,6 @@
 FROM 0x01be/openroad:build as build
 
-FROM 0x01be/xpra
+FROM alpine
 
 COPY --from=build /opt/openroad/ /opt/openroad/
 
