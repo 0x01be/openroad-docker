@@ -1,67 +1,23 @@
-FROM 0x01be/swig:3.0 as swig
+FROM 0x01be/openroad:build as build
 
-FROM alpine as builder
+FROM 0x01be/xpra
 
-RUN apk add --no-cache --virtual build-dependencies \
-    git \
-    build-base \
-    cmake \
-    coreutils \
-    bison \
-    flex \
-    boost-dev \
-    tcl-dev \
-    zlib-dev \
-    autoconf \
-    automake \
-    pcre-dev \
-    qt5-qtbase-dev
+COPY --from=build /opt/openroad/ /opt/openroad/
 
-COPY --from=swig /opt/swig/ /opt/swig/
-
-ENV SWIG_VERSION=3.0.12
-ENV SWIG_DIR /opt/swig/share/swig/$SWIG_VERSION/
-ENV SWIG_EXECUTABLE /opt/swig/bin/swig
-ENV PATH $PATH:/opt/swig/bin/
-
-ENV EIGEN_VERSION 3.3.8
-
-RUN git clone --depth 1 --branch ${EIGEN_VERSION} https://gitlab.com/libeigen/eigen.git /eigen
-
-WORKDIR /eigen/build
-RUN cmake \
-    -DCMAKE_INSTALL_PREFIX=/opt/eigen \
-    ..
-RUN make
-RUN make install
-
-ENV LEMON_VERSION 1.3.1
-
-ADD http://lemon.cs.elte.hu/pub/sources/lemon-${LEMON_VERSION}.tar.gz /lemon-${LEMON_VERSION}.tar.gz
-WORKDIR /
-RUN tar xzf lemon-${LEMON_VERSION}.tar.gz
-WORKDIR /lemon-${LEMON_VERSION}/build
-RUN cmake \
-    -DCMAKE_INSTALL_PREFIX=/opt/lemon \
-    ..
-RUN make
-RUN make install 
-
-RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /openroad
-
-WORKDIR /openroad/build
-
-ENV LD_LIBRARY_PATH /lib/:/usr/lib:/opt/eigen/lib/:/opt/lemon/lib/
-ENV C_INCLUDE_PATH /usr/include/:/opt/eigen/include/:/opt/lemon/include/
-
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h
+USER root
+RUN chmod +x /opt/openroad/bin/*
 RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
-RUN cmake \
-    -DCMAKE_INSTALL_PREFIX=/opt/openroad \
-    ..
-RUN make
-RUN make install
+RUN apk add --no-cache --virtual openroad-runtime-dependencies \
+    libstdc++ \
+    tcl \
+    zlib \
+    pcre \
+    qt5-qtbase-x11
+
+USER xpra
+
+ENV PATH ${PATH}:/opt/openroad/bin/
+
+ENV COMMAND "openroad -gui"
 
