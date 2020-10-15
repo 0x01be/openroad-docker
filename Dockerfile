@@ -47,12 +47,13 @@ RUN git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD /open
 
 WORKDIR /openroad/build
 
-ENV LD_LIBRARY_PATH /opt/eigen/lib/:/opt/lemon/lib/
-ENV C_INCLUDE_PATH /opt/eigen/include/:/opt/lemon/include/
+ENV LD_LIBRARY_PATH /lib/:/usr/lib:/opt/eigen/lib/:/opt/lemon/lib/
+ENV C_INCLUDE_PATH /usr/include/:/opt/eigen/include/:/opt/lemon/include/
 
 RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp
 RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h
 RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h
+RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
