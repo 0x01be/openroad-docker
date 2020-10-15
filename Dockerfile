@@ -10,7 +10,8 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     libstdc++ \
     tcl \
     zlib \
-    pcre
+    pcre \
+    qt5-qtbase
 
 ENV PATH ${PATH}:/opt/openroad/bin/
 
