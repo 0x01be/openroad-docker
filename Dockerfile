@@ -6,14 +6,14 @@ COPY --from=build /opt/openroad/ /opt/openroad/
 
 USER root
 
-RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
-
 RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     libstdc++ \
     tcl \
     zlib \
     pcre \
     qt5-qtbase-x11
+
+RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 USER xpra
 
