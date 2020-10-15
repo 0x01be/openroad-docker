@@ -6,6 +6,7 @@ RUN apk add --no-cache --virtual build-dependencies \
     git \
     build-base \
     cmake \
+    coreutils \
     bison \
     flex \
     boost-dev \
