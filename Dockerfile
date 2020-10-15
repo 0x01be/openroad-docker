@@ -24,7 +24,9 @@ ENV SWIG_DIR /opt/swig/share/swig/$SWIG_VERSION/
 ENV SWIG_EXECUTABLE /opt/swig/bin/swig
 ENV PATH $PATH:/opt/swig/bin/
 
-RUN git clone --depth 1 https://gitlab.com/libeigen/eigen.git /eigen
+ENV EIGEN_VERSION 3.3.8
+
+RUN git clone --depth 1 --branch ${EIGEN_VERSION} https://gitlab.com/libeigen/eigen.git /eigen
 
 WORKDIR /eigen/build
 RUN cmake \
@@ -33,10 +35,12 @@ RUN cmake \
 RUN make
 RUN make install
 
-ADD http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz /lemon-1.3.1.tar.gz
+ENV LEMON_VERSION 1.3.1
+
+ADD http://lemon.cs.elte.hu/pub/sources/lemon-${LEMON_VERSION}.tar.gz /lemon-${LEMON_VERSION}.tar.gz
 WORKDIR /
-RUN tar xzf lemon-1.3.1.tar.gz
-WORKDIR /lemon-1.3.1/build
+RUN tar xzf lemon-${LEMON_VERSION}.tar.gz
+WORKDIR /lemon-${LEMON_VERSION}/build
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/lemon \
     ..
