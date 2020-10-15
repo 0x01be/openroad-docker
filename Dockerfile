@@ -5,7 +5,7 @@ FROM 0x01be/xpra
 COPY --from=build /opt/openroad/ /opt/openroad/
 
 USER root
-RUN chmod +x /opt/openroad/bin/*
+
 RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 RUN apk add --no-cache --virtual openroad-runtime-dependencies \
