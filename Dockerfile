@@ -11,7 +11,7 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     tcl \
     zlib \
     pcre \
-    qt5-qtbase
+    qt5-qtbase-x11
 
 ENV PATH ${PATH}:/opt/openroad/bin/
 
