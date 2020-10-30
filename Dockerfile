@@ -2,10 +2,6 @@ FROM 0x01be/openroad:build as build
 
 FROM 0x01be/xpra
 
-COPY --from=build /opt/openroad/ /opt/openroad/
-
-USER root
-
 RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     libstdc++ \
     tcl \
@@ -13,11 +9,11 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     pcre \
     qt5-qtbase-x11
 
+COPY --from=build /opt/openroad/ /opt/openroad/
+
 RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 USER xpra
-
 ENV PATH ${PATH}:/opt/openroad/bin/
-
 ENV COMMAND "openroad -gui"
 
