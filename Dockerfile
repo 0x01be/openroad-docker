@@ -8,7 +8,7 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     zlib \
     pcre \
     qt5-qtbase-x11 \
-    mesa-sri-swrast
+    mesa-dri-swrast
 
 COPY --from=build /opt/openroad/ /opt/openroad/
 
