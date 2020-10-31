@@ -7,7 +7,8 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     tcl \
     zlib \
     pcre \
-    qt5-qtbase-x11
+    qt5-qtbase-x11 \
+    mesa-sri-swrast
 
 COPY --from=build /opt/openroad/ /opt/openroad/
 
