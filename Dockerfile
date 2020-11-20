@@ -14,7 +14,7 @@ COPY --from=build /opt/openroad/ /opt/openroad/
 
 RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
-USER xpra
-ENV PATH ${PATH}:/opt/openroad/bin/
-ENV COMMAND "openroad -gui"
+USER ${USER}
+ENV PATH=${PATH}:/opt/openroad/bin/ \
+    COMMAND="openroad -gui"
 
