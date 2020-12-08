@@ -33,8 +33,7 @@ COPY --from=cudd /opt/cudd/ /opt/cudd/
 COPY --from=coin /opt/coin/ /opt/coin/
 COPY --from=lemon /opt/lemon/ /opt/lemon/
 
-ENV LEMON_VERSION=1.3.1 \
-    SWIG_VERSION=3.0.12 \
+ENV SWIG_VERSION=3.0.12 \
     SWIG_EXECUTABLE=/opt/swig/bin/swig \
     PATH=${PATH}:/opt/swig/bin/ \
     LD_LIBRARY_PATH=/lib/:/usr/lib:/opt/cudd/lib/:/opt/coin/lib/:/opt/lemon/lib/ \
