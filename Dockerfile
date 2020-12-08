@@ -63,7 +63,7 @@ RUN mkdir /opt/openroad && cp -R /openroad /opt/openroad/src &&\
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
     -DEigen3_DIR=/opt/eigen/ \
-    -DCUDD_LIB=/opt/cudd \
+    -DCUDD_LIB=/opt/cudd/lib/libcudd.a \
     ..
 RUN make
 RUN make install
