@@ -48,6 +48,10 @@ RUN apk add --no-cache --virtual openroad-edge-build-dependencies \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
     glpk-dev
 
+RUN apk add --no-cache --virtual openroad-doc-dependencies \
+    doxygen \
+    graphviz
+
 WORKDIR /openroad/build
 
 RUN mkdir /opt/openroad && cp -R /openroad /opt/openroad/src &&\
