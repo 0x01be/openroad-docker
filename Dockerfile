@@ -7,8 +7,20 @@ RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     tcl \
     zlib \
     pcre \
+    libgomp \
+    gmp \
+    qt5-qtbase \
     qt5-qtbase-x11 \
-    mesa-dri-swrast
+    qt5-qtdeclarative \
+    qt5-qtwayland \
+    mesa-dri-swrast \
+    spdlog
+
+RUN apk add --no-cache --virtual openroad-edge-runtime-dependencies \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+    glpk
 
 COPY --from=build /opt/openroad/ /opt/openroad/
 
