@@ -48,22 +48,18 @@ RUN apk add --no-cache --virtual openroad-edge-build-dependencies \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
     glpk-dev
 
-RUN mkdir /opt/openroad && cp -R /openroad /opt/openroad/src
-
 WORKDIR /openroad/build
 
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h
-RUN sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h
-RUN ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
-
-ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/lemon/lib/ \
-    C_INCLUDE_PATH=${C_INCLUDE_PATH}:/opt/lemon/include/ \
-    CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/lemon
+RUN mkdir /opt/openroad && cp -R /openroad /opt/openroad/src &&\
+    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp &&\
+    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h &&\
+    sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h &&\
+    ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
 
 RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
     -DEigen3_DIR=/opt/eigen/ \
+    -DCUDD_LIB=/opt/cudd \
     ..
 RUN make
 RUN make install
