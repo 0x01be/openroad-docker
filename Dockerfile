@@ -20,8 +20,6 @@ ENV SWIG_VERSION=3.0.12 \
     CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/eigen:/opt/cudd:/opt/coin:/opt/lemon
 ENV SWIG_DIR /opt/swig/share/swig/${SWIG_VERSION}/
 
-WORKDIR /openroad/build
-
 RUN apk add --no-cache --virtual openroad-build-dependencies \
     git \
     build-base \
@@ -53,8 +51,10 @@ RUN apk add --no-cache --virtual openroad-build-dependencies \
     sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/zutil/misc_functions.cpp &&\
     sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbAttrTable.h &&\
     sed -i.bak 's/PAGE_SIZE/PAGE_SIZE_OPENDB/g' /openroad/src/OpenDB/src/db/dbPagedVector.h &&\
-    ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so &&\
-    cmake \
+    ln -s /usr/lib/libtcl8.6.so /usr/lib/libtcl.so
+
+WORKDIR /openroad/build
+RUN cmake \
     -DCMAKE_INSTALL_PREFIX=/opt/openroad \
     -DEigen3_DIR=/opt/eigen/ \
     -DCUDD_LIB=/opt/cudd/lib/libcudd.a \
