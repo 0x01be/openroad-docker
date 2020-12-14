@@ -37,7 +37,8 @@ RUN apk add --no-cache --virtual openroad-build-dependencies \
     qt5-qtdeclarative-dev \
     qt5-qtwayland \
     gmp-dev \
-    spdlog-dev &&\
+    spdlog-dev \
+    python3-dev &&\
     git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD.git /openroad &&\
     apk add --no-cache --virtual openroad-edge-build-dependencies \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
@@ -61,4 +62,10 @@ RUN cmake \
     .. &&\
     make
 RUN make install && chmod +x /opt/openroad/bin/*
+
+WORKDIR /openroad/src/OpenDB/build
+RUN cmake \
+    -DCMAKE_INSTALL_PREFIX=/opt/openroad \
+    .. &&\
+    make
 
