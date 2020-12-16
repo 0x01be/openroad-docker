@@ -3,8 +3,8 @@ FROM 0x01be/openroad:build as build
 FROM 0x01be/xpra
 
 COPY --from=build /opt/openroad/ /opt/openroad/
-COPY --from=build /openroad/src/OpenDB/build/ /opt/opendb/
-COPY --from=build /openroad/src/OpenDB/include/opendb/db.h /opt/opendb/include/opendb/
+COPY --from=build /openroad/src/OpenDB/build/ /opt/openroad/opendb/
+COPY --from=build /openroad/src/OpenDB/include/opendb/db.h /opt/openroad/include/opendb/
 
 RUN apk add --no-cache --virtual openroad-runtime-dependencies \
     libstdc++ \
